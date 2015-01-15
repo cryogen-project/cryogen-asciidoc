@@ -22,4 +22,6 @@
                    (Collections/emptyMap))
           (rewrite-hrefs (:blog-prefix config)))))))
 
-(swap! markup-registry conj (asciidoc))
+(defn init []
+  (swap! markup-registry conj (asciidoc)))
+
