@@ -1,0 +1,2 @@
+{:description "AsciiDoc parser"
+ :namespace cryogen-asciidoc.core}
