@@ -5,6 +5,8 @@
            java.util.Collections
            cryogen_core.markup.Markup))
 
+(def ^:private ^:static adoc (Asciidoctor$Factory/create))
+
 (defn asciidoc
   "Returns an Asciidoc (http://asciidoc.org/) implementation of the
   Markup protocol."
@@ -15,7 +17,7 @@
     (render-fn [this]
       (fn [rdr config]
         (->>
-          (.convert (Asciidoctor$Factory/create)
+          (.convert adoc
                    (->> (java.io.BufferedReader. rdr)
                         (line-seq)
                         (s/join "\n"))
@@ -24,4 +26,3 @@
 
 (defn init []
   (swap! markup-registry conj (asciidoc)))
-
