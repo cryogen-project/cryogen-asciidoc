@@ -1,10 +1,12 @@
 # cryogen-asciidoc
 
+[![Clojars Project](http://clojars.org/cryogen-asciidoc/latest-version.svg)](http://clojars.org/cryogen-asciidoc)
+
 A Clojure library to provide AsciiDoc rendering to the cryogen-core compiler
 
 ## Usage
 
-Add `[cryogen-asciidoc "0.1.1"]` to the `:dependencies` keyword of the `project.clj` of your generated cryogen blog.
+Add the latest `cryogen-asciidoc` dependency to the `project.clj` of your generated Cryogen blog.
 
 ## License
 
