@@ -24,4 +24,3 @@
 
 (defn init []
   (swap! markup-registry conj (asciidoc)))
-
