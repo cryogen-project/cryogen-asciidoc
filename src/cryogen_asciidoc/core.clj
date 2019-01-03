@@ -23,7 +23,7 @@
                    (->> (java.io.BufferedReader. rdr)
                         (line-seq)
                         (s/join "\n"))
-                   {Options/SAFE (int 1)})
+                   {Options/SAFE (.getLevel SafeMode/SAFE)})
           (rewrite-hrefs (:blog-prefix config)))))))
 
 (defn init []
