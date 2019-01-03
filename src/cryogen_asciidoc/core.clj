@@ -2,6 +2,8 @@
   (:require [cryogen-core.markup :refer [rewrite-hrefs markup-registry]]
             [clojure.string :as s])
   (:import org.asciidoctor.Asciidoctor$Factory
+           org.asciidoctor.Options
+           org.asciidoctor.SafeMode
            java.util.Collections
            cryogen_core.markup.Markup))
 
@@ -21,7 +23,7 @@
                    (->> (java.io.BufferedReader. rdr)
                         (line-seq)
                         (s/join "\n"))
-                   (Collections/emptyMap))
+                   {Options/SAFE (int 1)})
           (rewrite-hrefs (:blog-prefix config)))))))
 
 (defn init []
