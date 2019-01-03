@@ -1,4 +1,4 @@
-(defproject cryogen-asciidoc "0.1.3"
+(defproject cryogen-asciidoc "0.1.4"
   :description "AsciiDoc parser for Cryogen"
   :url "https://github.com/cryogen-project/cryogen-asciidoc"
   :license {:name "Eclipse Public License"
