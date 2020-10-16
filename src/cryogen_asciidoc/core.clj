@@ -21,7 +21,7 @@
   []
   (reify Markup
     (dir [this] "asc")
-    (exts [this] #{".adoc" ".ad" ".asciidoc" ".asc"})
+    (ext [this] ".asc")
     (render-fn [this]
       (fn [rdr config]
         (->>
