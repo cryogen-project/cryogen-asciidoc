@@ -9,6 +9,12 @@
 
 (def ^:private ^:static adoc (Asciidoctor$Factory/create))
 
+(defn keys->strings
+  "Change the keys in the given map to strings if they are keywords"
+  [m]
+  (into {}
+        (map (fn [[k v]] [(name k) v]) m)))
+
 (defn asciidoc
   "Returns an Asciidoc (http://asciidoc.org/) implementation of the
   Markup protocol."
@@ -23,7 +29,10 @@
                    (->> (java.io.BufferedReader. rdr)
                         (line-seq)
                         (s/join "\n"))
-                   {Options/SAFE (.getLevel SafeMode/SAFE)})
+                   (merge
+                     {Options/SAFE (.getLevel SafeMode/SAFE)}
+                     (keys->strings
+                       (:asciidoctor config))))
           (rewrite-hrefs (:blog-prefix config)))))))
 
 (defn init []
