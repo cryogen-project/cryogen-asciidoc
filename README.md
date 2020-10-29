@@ -44,6 +44,45 @@ and [FontAwesome](https://github.com/darshandsoni/asciidoctor-skins/blob/71ce8dc
 
 [1]: https://github.com/asciidoctor/asciidoctorj/blob/master/asciidoctorj-api/src/main/java/org/asciidoctor/Options.java
 
+### Extensions
+
+You can register custom [Asciidoctor extensions](https://asciidoctor.org/docs/user-manual/#extensions). Currently, only block and inline macros are supported.
+
+For block/inline macros: create a function taking `[^BaseProcessor this ^ContentNode parent ^String target attributes]`
+and using the factory methods in [BaseProcessor](https://github.com/asciidoctor/asciidoctorj/blob/master/asciidoctorj-api/src/main/java/org/asciidoctor/extension/BaseProcessor.java)
+to create a new node. See the [AsciidoctorJ extension examples](https://github.com/asciidoctor/asciidoctorj/blob/master/docs/integrator-guide.adoc#writing-an-extension).
+
+By default, you function will be registered as both an inline and block macro so you can invoke it with either `mymacro:` or `mymacro::`.
+If you explicitely only want to allow one of these, you can set the `:extension/types` metadata to a set of supported types
+(`:inline` or/and `:block`).
+
+You register your extensions in the Cryogen `config.edn` under `:asciidoctor :extensions`, which is a map from the macro name
+to the fully qualified symbol representing the function.
+
+#### Example - GitHub issue link macro
+
+```clojure
+;; config.edn
+{:site-title  "AsciiDoctor test"
+ ;...
+ :asciidoctor {:extensions {"gh" my.ns/gh}}}
+```
+
+```clojure
+(ns my.ns)
+(defn ^{:extension/types #{:inline}} gh
+  "Example macro that makes `gh:3[holyjak/myrepo]` into a link to https://github.com/holyjak/myrepo/issues/3"
+  [^BaseProcessor this ^ContentNode parent ^String target attributes]
+  (let [repo (get attributes "1" "") ; positional attributes get keys such as "1", "2", ...
+        href (str "https://github.com/" repo "/issues/" target)
+        opts (doto (java.util.HashMap.) ; BEWARE: Must be mutable
+               (.putAll {"type" ":link"
+                         "target" href}))]
+    (.createPhraseNode this parent "anchor" target
+                       {}
+                       opts)))
+```
+
 ## License
 
 Copyright © 2015 Dmitri Sotnikov <yogthos@gmail.com>
