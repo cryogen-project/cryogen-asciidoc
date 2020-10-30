@@ -1,13 +1,21 @@
 (ns cryogen-asciidoc.core
   (:require [cryogen-core.markup :refer [rewrite-hrefs markup-registry]]
+            [cryogen-asciidoc.extensions :as ext]
             [clojure.string :as s])
   (:import org.asciidoctor.Asciidoctor$Factory
            org.asciidoctor.Options
            org.asciidoctor.SafeMode
-           java.util.Collections
            cryogen_core.markup.Markup))
 
-(def ^:private ^:static adoc (Asciidoctor$Factory/create))
+(def ^:private ^:static adoc (atom nil))
+
+(defn get-or-init-adoc
+  "Initialize adoc based on the configuration"
+  [adoc {:keys [extensions]}]
+  (compare-and-set! adoc nil (delay (doto (Asciidoctor$Factory/create)
+                                      (ext/register-extensions extensions))))
+  @@adoc)
+
 
 (defn keys->strings
   "Change the keys in the given map to strings if they are keywords"
@@ -50,7 +58,7 @@
     (render-fn [this]
       (fn [rdr config]
         (->>
-          (.convert adoc
+          (.convert (get-or-init-adoc adoc (:asciidoctor config))
                    (->> (java.io.BufferedReader. rdr)
                         (line-seq)
                         (s/join "\n"))
