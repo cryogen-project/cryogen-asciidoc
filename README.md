@@ -83,6 +83,30 @@ to the fully qualified symbol representing the function.
                        opts)))
 ```
 
+#### Example - abbreviation macro
+
+With the following macro (inspired by asciidoctor/asciidoctor#252), properly register in a similar manner as above, you can write
+
+```asciidoc
+Now I am talking about abbr:AOP["Aspect-Oriented Programming"], an important topic.
+```
+
+to get
+
+```html
+Now I am talking about <abbr title="Aspect-Oriented Programming">AOP</abbr>, ...
+```
+
+The macro:
+
+```clojure
+(defn abbr[_ _ target attributes]
+  (str "<abbr title=\"" (get attributes "1" "N/A") "\">" target "</abbr>"))
+```
+
+Notice that returning a string is "deprecated" but still possible and currently (AsciidoctorJ v2.10)
+[the only way to return custom HTML from an inline macro](https://discuss.asciidoctor.org/How-to-create-inline-macro-producing-HTML-In-AsciidoctorJ-td8313.html).
+
 ## License
 
 Copyright © 2015 Dmitri Sotnikov <yogthos@gmail.com>
