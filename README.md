@@ -100,12 +100,14 @@ Now I am talking about <abbr title="Aspect-Oriented Programming">AOP</abbr>, ...
 The macro:
 
 ```clojure
-(defn abbr[_ _ target attributes]
-  (str "<abbr title=\"" (get attributes "1" "N/A") "\">" target "</abbr>"))
+(defn abbr [^BaseProcessor this ^ContentNode parent ^String target attributes]
+  (let [attrs (HashMap. {})
+        opts  (HashMap. {"subs" []})]
+    (.createPhraseNode
+      this parent "quoted"
+      (str "<abbr title=\"" (get attributes "1" "N/A") "\">" target "</abbr>")
+      attrs opts)))
 ```
-
-Notice that returning a string is "deprecated" but still possible and currently (AsciidoctorJ v2.10)
-[the only way to return custom HTML from an inline macro](https://discuss.asciidoctor.org/How-to-create-inline-macro-producing-HTML-In-AsciidoctorJ-td8313.html).
 
 ## License
 
