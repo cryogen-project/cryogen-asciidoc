@@ -1,0 +1,6 @@
+{:paths ["resources"  ; needs to be in `paths` otherwise sys.classloader doesn't find plugin.edn
+         "src" ]
+ :deps {cryogen-core/cryogen-core {:mvn/version "0.4.4"}
+        ;; BEWARE: keep in sync with project.clj
+        org.asciidoctor/asciidoctorj {:mvn/version "3.0.0-alpha.1"}}
+ }
