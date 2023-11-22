@@ -60,7 +60,7 @@
   (let [opts-map
         (deep-merge
          {Options/SAFE (.getLevel SafeMode/SAFE)}
-         (keys->strings asciidoctor)
+         (keys->strings (dissoc asciidoctor :extensions))
          (keys->strings (:asciidoctor page-meta)))]
     (when debug?
       (println "DEBUG cryogen-asciidoc: options =" opts-map))
